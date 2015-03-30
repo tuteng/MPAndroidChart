@@ -1,5 +1,5 @@
-由于最近进行android图表的开发，需要学习图表的使用顺便翻译了一下mpandroidchart这个开源库，再此感谢作者。
-参考资料:
-https://github.com/PhilJay/MPAndroidChart
-https://github.com/PhilJay/MPAndroidChart/wiki
-http://blog.csdn.net/guijiaoba/article/details/41444697
+由于最近进行android图表的开发，需要学习图表的使用顺便翻译了一下mpandroidchart这个开源库，再此感谢作者。   
+参考资料:   
+https://github.com/PhilJay/MPAndroidChart   
+https://github.com/PhilJay/MPAndroidChart/wiki   
+http://blog.csdn.net/guijiaoba/article/details/41444697   
