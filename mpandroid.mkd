@@ -1,3 +1,4 @@
+###开始
 ####安装
 为了使用 LineChart, BarChart, ScatterChart, CandleStickChart, PieChart or RadarChart，像下面一样定义它在 .xml中：
 
@@ -22,7 +23,9 @@
 ####数据记录
 * setLogEnabled(boolean enabled):设置这个为真将激活图表项目中的logcat输出
 ####通用图表项目样式
-下面是一些你能直接使用在图表项目中的通用的样式方法。
+
+下面是一些你能直接使用在图表项目中的通用的样式方法。  
+
 * setBackgroundColor(int color)：设置背景颜色这将覆盖整个图表项目视图。另外，一个背景颜色能被设置在.xml的布局文件中
 * setDescription(String desc):设置一个描述文本出现在图表的右下角。
 * setNoDataTextDescription(String desc): 设置文本应该出现如果图标为空。
@@ -114,20 +117,23 @@ OnChartGestureListener将允许你对图表上的手势作出反应：
 * getHighlighted()：返回一个Highlight[]的数组包含关于所有高亮入口的信息，它们的x-索引和数据集的索引。
     
 ###YAxis(YLabels)
+
 YAxis类（在2.0.0之前是Ylabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter or CandleStickChart都有一个左和一个右的YAxis对象，分别负责左边或者右边。RadarChart只有一个YAxis。默认，图表的所有轴在被绘制的时候都被打开。
 YAxis类允许对下面的组件或部分指定具体的样式：
+
 * 标签（绘制时垂直对齐），包括轴的描述值。
 * 坐标轴，它直接被绘制平行于标签旁边。
 * 网格线，每个来自水平方向的标签轴。
-* LimitLines,允许呈现具体的信息，像边框或者限制。
-为了取得YAxis类的实例，调用下面的方法：
+* LimitLines,允许呈现具体的信息，像边框或者限制。   
+   
+为了取得YAxis类的实例，调用下面的方法：   
 
-    YAxis leftAxis = chart.getAxisLeft();
-    YAxis rightAxis = chart.getAxisRight();
-    
-    YAxis leftAxis = chart.getAxis(AxisDependency.LEFT);
-    
-    YAxis yAxis = radarChart.getYAxis(); // this method radarchart only
+        YAxis leftAxis = chart.getAxisLeft();
+        YAxis rightAxis = chart.getAxisRight();
+        
+        YAxis leftAxis = chart.getAxis(AxisDependency.LEFT);
+        
+        YAxis yAxis = radarChart.getYAxis(); // this method radarchart only
     
 在运行时刻，使用 public AxisDependency getAxisDependency()来确定图表轴呈现的边。
 ####控制轴的哪部分应该被绘制
@@ -156,8 +162,10 @@ YAxis类允许对下面的组件或部分指定具体的样式：
 * setPosition(YAxisLabelPosition pos):设置轴标签应该被绘制的位置。INSIDE_CHART或者OUTSIDE_CHART中的一个。
 自定义影响轴的数值范围应该在图表被设置数据之前应用。
 ####自定义轴标签式
-* 对此轴设置一个自定义的 ValueFormatter 。这个接口允许格式化或者修改原始标签文本和代替返回一个自定义的文本。
-自定义格式化的例子：
+* 对此轴设置一个自定义的 ValueFormatter 。这个接口允许格式化或者修改原始标签文本和代替返回一个自定义的文本。   
+
+自定义格式化的例子：   
+
         public class MyValueFormatter implements ValueFormatter {
         
             private DecimalFormat mFormat;
@@ -185,9 +193,10 @@ YAxis支持LimitLines的调用允许呈现专用信息，像边框或者约束�
 
 *  addLimitLine(LimitLine l):增加一个新的LimitLines为这个轴。  
 *  removeLimitLine(LimitLine l):移除指定的LimitLines从此轴。  
-*  多个方法也适用于添加或者移除。  
+*  多个方法也适用于添加或者移除。    
+
  限制线（类 LimitLine）（也称我为指示线）是明确和简单的线能给使用者提供额外的信息。  
- 这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户一个心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。     
+ 这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。     
  例子：  
      
         YAxis leftAxis = chart.getAxisLeft();
@@ -202,13 +211,16 @@ YAxis支持LimitLines的调用允许呈现专用信息，像边框或者约束�
         leftAxis.addLimitLine(ll);
      
 ###XAxis (XLabels)
-XAxis类（在2.0.0之前是XLabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList模板 或者 String[]和交给ChartData对象的是什么。  
+XAxis类（在2.0.0之前是XLabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList模板 或者 String[]和交给ChartData对象的是什么。    
 XAxis类允许对下面的组件或部分指定具体的样式：
+
 * 标签（绘制时水平对齐），包括轴的描述值，这些包括提供的数据对象你为图表设置的（x轴的值）
 * 坐标轴，它直接被绘制平行于标签旁边。
 * 网格线，每个来自垂直方向的标签轴。
-为了取得XAxis类的实例，调用下面的方法：
-    XAxis xAxis = chart.getXAxis();
+
+为了取得XAxis类的实例，调用下面的方法：     
+
+        XAxis xAxis = chart.getXAxis();
  
 ####控制轴的哪部分应该被绘制
 * setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
@@ -228,7 +240,8 @@ XAxis类允许对下面的组件或部分指定具体的样式：
 * 如果被设置为true，x轴条目将依赖于它自己在进行缩放的时候。如果设置为false，x轴条目将总是保持相同。
 * 如果设置为true，图表将避免第一个和最后一个标签条目被减掉在图表或屏幕的边缘。
 * 设置x轴标签之间的空间字符数，默认是4个。
-* 设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。
+* 设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。   
+
 例子：
 
         XAxis xAxis = chart.getXAxis();
@@ -240,8 +253,10 @@ XAxis类允许对下面的组件或部分指定具体的样式：
         // and more...
         
 ###设置数据
-如果你想增加值（数据）到图表中，它必须用下面这个方法。   
-         public void setData(ChartData data) { ... }    
+如果你想增加值（数据）到图表中，它必须用下面这个方法。      
+   
+         public void setData(ChartData data) { ... }       
+         
 基类ChartData类封装了所有的数据和信息那是在图表绘制期间需要的。对于每种类型的图表，ChartData的不同的子类（例如LineData）存在应该被用来为图表设置数据。在构造函数中，你能移交数据到ArrayList模板，并且作为值来显示，另外字符串的ArrayList将描述在x轴的标签。例如类LineData（继承自ChartData），用来增加数据到LineChart： 
     
             // this is just one of many constructors
@@ -249,13 +264,17 @@ XAxis类允许对下面的组件或部分指定具体的样式：
         
 因此，什么是DataSet为什么需要它？那实际上相当简单。在图表内互相在一起的数据集对象表示一组条目（数据条目类型）。它被设计用来区分在图表中逻辑上不同组的值。对于每种类型的图表，扩展数据集 （例如 LineDataSet） 的不同对象存在允许特定的样式。
 作为一个例子，你可能想用LineChart展示两个不同公司的季度收入在一年中的。在这种情况下，建议你创建两个不同的LineDataSet对象，每个包含四个指（每个占四分之一）。用ArrayList来描述x轴上的标签，你可以简单的提供四个字符串“1.Q”,“2.Q”,“3.Q”,“4.Q"
-当然，你只提供一个包含两个公司8个值的LineDataSet对象也是可以的。   
-那么怎么设置一个LinDataSet对象呢？
-     public LineDataSet(ArrayList<Entry> yVals, String label) { ... }
+当然，你只提供一个包含两个公司8个值的LineDataSet对象也是可以的。    
+   
+那么怎么设置一个LinDataSet对象呢？      
+
+     public LineDataSet(ArrayList<Entry> yVals, String label) { ... }   
      
 在查找构造函数时（不同的构造函数可用），它是可见的，LinedataSet需要一个ArrayList条目类型和一个字符串用来描述LineDataSet以及用于图标标签。更进一步这个标签能被用来寻找在LineData对象中除LineDataSet对象外的其他LineDataSet。
-ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装它周围的值还保存了它自己的值，它的位置在x轴（在LineData对象的字符串类型的ArrayList里面值的索引被映射）：
+ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装它周围的值还保存了它自己的值，它的位置在x轴（在LineData对象的字符串类型的ArrayList里面值的索引被映射）：    
+
      public Entry(float val, int xIndex) { ... }
+     
 把它们放在一起（例如两个公司 一年里的季度收入）：
 首先，创建Entry的类型的列表保存你的值：
 
@@ -274,11 +293,12 @@ ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装
             valsComp2.add(c2e1);
             Entry c2e2 = new Entry(110.000f, 1); // 1 == quarter 2 ...
             valsComp2.add(c2e2);
-            //...
+            //...    
+            
 现在我们有了Entry对象的列表，LineDataSet对象可以被创建：
 
-        LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
-        LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
+            LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
+            LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
         
 但是还没完，我们创建一个DataSets的列表和一个x轴条目的列表并且构建我们的ChartData对象：
     
@@ -291,13 +311,18 @@ ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装
         
             LineData data = new LineData(xVals, dataSets);
             mLineChart.setData(data);
-            mLineChart.invalidate(); // refresh
-在调用了invalidate（）之后图表被刷新并且提供的数据被绘制。
+            mLineChart.invalidate(); // refresh   
+            
+在调用了invalidate（）之后图表被刷新并且提供的数据被绘制。   
+
 ###设置颜色
 自从发布1.4.0之后，在以前版本中负责颜色设置的ColorTemplate对象不在需要。然而它依然保存了所有与定义的颜色数组（例如ColorTemplate.VORDIPLOM_COLORS）并且提供了方便的方法为了从资源（资源整数）转换颜色到真正的颜色。
-取代了ColorTemplate，颜色现在能被直接指定在DataSet对象中，那将允许区分每种DataSet样式。 
-在这个简短的例子中，我们有两个不同的LineDataSet对象来代表两家公司的季度收入（在前面设置数据指南中提到的），我们现在想设置不同的颜色。
-我们想做如下：
+取代了ColorTemplate，颜色现在能被直接指定在DataSet对象中，那将允许区分每种DataSet样式。   
+
+在这个简短的例子中，我们有两个不同的LineDataSet对象来代表两家公司的季度收入（在前面设置数据指南中提到的），我们现在想设置不同的颜色。  
+
+我们想做如下：   
+
 * 公司1的值应该通过四个红色的不同的变量来呈现。
 * 公司2的值应该通过四个绿色的不同的变量来呈现。
 
@@ -310,11 +335,13 @@ ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装
       LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
       setComp2.setColors(new int[] { R.color.green1, R.color.green2, R.color.green3, R.color.green4 }, Context);
     
-除了以上，有许多其他的方法来给数据集设置颜色。下面是完整的文档：
+除了以上，有许多其他的方法来给数据集设置颜色。下面是完整的文档：  
+
 * 设置颜色应该被用在数据集前面，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。你能使用"new int[] { R.color.red, R.color.green, ... }" 来给这个方法提供颜色。在内部，颜色通过使用getResources().getColor(...)来获取。
 * 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
 * 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
-* 设置一种或者唯一一种颜色应该被用于这个数据集之前。在内部，这将重新创建颜色数组并添加指定的颜色。
+* 设置一种或者唯一一种颜色应该被用于这个数据集之前。在内部，这将重新创建颜色数组并添加指定的颜色。   
+
 ColorTemplate例子：
 
         LineDataSet set = new LineDataSet(...);
@@ -326,10 +353,12 @@ ColorTemplate例子：
 在第一章1. Getting Started 图表设置和样式方法可以被用于所有提到的图表类型。这章将集中于指定设置对于专有的图表类型。
 
 ###图例
-默认，所有的图表类型支持图例并且将自动生成绘制出图例在为图表设置数据之后。图例通常包含多种条目每个标签代表一个形状。
-自动生成的图例包含的项数取决于不同的颜色 （在所有数据集对象中） 以及数据集标签数目。图例标签依赖于在图表中使用的数据集对象设置的标签。在数据集对象中如果没有标签被制定，图表将自动生成它们。如果多种颜色被用在一个数据集中，这些颜色分组并且只被一个标签描述。  
-对于自定义的图例，你能从图表中检索图例对象使用getLegend()方法：
-    Legend legend = chart.getLegend();
+默认，所有的图表类型支持图例并且将自动生成绘制出图例在为图表设置数据之后。图例通常包含多种条目每个标签代表一个形状。   
+自动生成的图例包含的项数取决于不同的颜色 （在所有数据集对象中） 以及数据集标签数目。图例标签依赖于在图表中使用的数据集对象设置的标签。在数据集对象中如果没有标签被制定，图表将自动生成它们。如果多种颜色被用在一个数据集中，这些颜色分组并且只被一个标签描述。     
+对于自定义的图例，你能从图表中检索图例对象使用getLegend()方法：    
+
+        Legend legend = chart.getLegend();
+        
 ####控制图例是否被绘制
 * setEnabled(boolean enabled): 设置图例打开或者关闭，如果关闭，图例将不会被绘制。
 ####修改图例样式
@@ -342,34 +371,38 @@ ColorTemplate例子：
 * setFormSize(float size): 设置图例形式大小以dp为单位
 * setXEntrySpace(float space): 在水平轴上的图例项之间的间距设置。
 * setYEntrySpace(float space):垂直轴上的图例项之间的间距设置。
-* setFormToTextSpacefloat space): 设置图例标签和相应的图例窗体之间的空间。  
-例子：
-        Legend l = chart.getLegend();
-        l.setFormSize(10f); // set the size of the legend forms/shapes
-        l.setForm(LegendForm.CIRCLE); // set what type of form/shape should be used
-        l.setPosition(LegendPosition.BELOW_CHART_LEFT);
-        l.setTypeface(...);
-        l.setTextSize(12f);
-        l.setTextColor(Color.BLACK);
-        l.setXEntrySpace(5f); // set the space between the legend entries on the x-axis
-        l.setYEntrySpace(5f); // set the space between the legend entries on the y-axis
-        // and many more...
+* setFormToTextSpacefloat space): 设置图例标签和相应的图例窗体之间的空间。     
+
+例子：  
+    
+            Legend l = chart.getLegend();
+            l.setFormSize(10f); // set the size of the legend forms/shapes
+            l.setForm(LegendForm.CIRCLE); // set what type of form/shape should be used
+            l.setPosition(LegendPosition.BELOW_CHART_LEFT);
+            l.setTypeface(...);
+            l.setTextSize(12f);
+            l.setTextColor(Color.BLACK);
+            l.setXEntrySpace(5f); // set the space between the legend entries on the x-axis
+            l.setYEntrySpace(5f); // set the space between the legend entries on the y-axis
+            // and many more...
    
-####动态和实时数据
+###动态和实时数据
 为了动态增加或者移除数据到图表，有多种方法允许你增加或者移除条目对象到一个存在的数据集或者从数据集对象到一个存在的ChartData对象。  
 类DataSet（和所有的子类）：
 
 * addEntry（Entry e): 增加给出的条目对象到DataSet
-类ChartData（和所有的子类）
+####类ChartData（和所有的子类）
 * addEntry(Entry e, int dataSetIndex): 增加给的条目到数据集，指定了数据集索引。
-* addDataSet(DataSet d): 增加给的DataSet对象到ChartData对象
+* addDataSet(DataSet d): 增加给的DataSet对象到ChartData对象  
+
 另外也有几个方法来动态的移除数据。
-类DataSet（和所有的子类）：
+
+####类DataSet（和所有的子类）：
 
 * public boolean removeEntry(Entry e):移除给定的条目对象从数据集中。如果成功返回true
 * public boolean removeEntry(int xIndex): 移除给定的x索引处的条目从数据集中，如果成功返回true  
 
-类ChartData（和所有的子类）：    
+####类ChartData（和所有的子类）：    
 
 * public boolean removeEntry(Entry e, int dataSetIndex):移除给定的条目对象从数据集中，指定了数据集索引。如果成功返回true。
 * public boolean removeEntry(int xIndex, int dataSetIndex):从给定的数据集索引数据集中移除给定的 x 索引处的项.如果成功返回true。
@@ -393,3 +426,206 @@ ColorTemplate例子：
 如果animate（...)（任何类）被调用,不用再调用invalidate()来刷新图表。
 ####注意
 由于nineoldandroid-library的移除，动画不能在 Android 3.0 （API 级别 11） 以前的版本工作。然而，这并不会导致应用程序崩溃。调用上面提到的动画方法将不会做什么在这种情况下。
+
+###MarkerView
+MakerView类能被任何用户创建的类扩展为了展示自定义的（弹窗）View无论何时要在图表中高亮一个值。
+####设置或者得到marker
+* setMarkerView(MarkerView mv): 为图表设置一个MarkerView为了展示被选择的值在哪里。
+* getMarkerView(): 返回在图表中被设置的MarkerView，没有就返回null
+####自定义实现
+下面是一个看上去比较想MarkerView自定义实现的例子。比较重要的是你可以根据以下方法实现它：    
+  
+* refreshContent(Entry e, int dataSetIndex):每次这个方法被调用MarkerView被重新绘制，给你机会来更新它显示的内容（例如为TexView设置文本）
+* getXOffset():返回标记被绘制位置在x轴上的偏移。默认的，标记将被绘制在条目位置的左上边缘。
+* getYOffset(): 返回标记被绘制位置在y轴上的偏移。默认的，标记将被绘制在条目位置的左上边缘。  
+ 
+
+        public class CustomMarkerView extends MarkerView {
+        
+            private TextView tvContent;
+        
+            public CustomMarkerView (Context context, int layoutResource) {
+                super(context, layoutResource);
+                // this markerview only displays a textview
+                tvContent = (TextView) findViewById(R.id.tvContent);
+            }
+        
+            // callbacks everytime the MarkerView is redrawn, can be used to update the
+            // content (user-interface)
+            @Override
+            public void refreshContent(Entry e, int dataSetIndex) {
+                tvContent.setText("" + e.getVal()); // set the entry-value as the display text
+            }
+        
+            @Override
+            public int getXOffset() {
+                // this will center the marker-view horizontally
+                return -(getWidth() / 2);
+            }
+        
+            @Override
+            public int getYOffset() {
+                // this will cause the marker-view to be above the selected value
+                return -getHeight();
+            }
+        }
+        
+在设置了自定义的标记类之后，创建一个.xml的布局来呈现你的标记。在这个例子中布局包含一个带背景图片的相对布局还包含一个TextView。当然你可以创建任何你想到的布局在这里。
+
+        <?xml version="1.0" encoding="utf-8"?>
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/markerImage" >
+        
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text=""
+                android:textSize="12dp"
+                android:textColor="@android:color/white"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+        </RelativeLayout>     
+        
+最后，在你创建了你自己的MarkerView之后，在图表中设置它。在创建你的MarkerView的时候，确保你提供了布局资源在你创建的.xml中。  
+        
+        CustomMarkerView mv = new CustomMarkerView (Context, R.layout.custom_marker_view_layout);
+        
+        // set the marker to the chart
+        chart.setMarkerView(mv);
+
+###ChartData类
+这个维基条目旨在更好地洞察 MPAndroidChart 背后的数据模型。
+ChartData类是所有数据类的基类（子类），像LineData，BarData，...等等。它被用来为Chart提供数据像图表中的setData()方法。  
+
+            public class LineData extends ChartData { ...
+        
+下面提到的方法被实现在ChartData类中，因此也能被用在所有子类中。
+####数据样式
+* setValueTextColor(int color):设置文本值（值标签被绘制的颜色）的颜色为这个数据对象包含的所有数据集。
+* setValueTextSize(float size): 设置文本值（以dp为单位）的字体大小为此数据对象所包含的所有数据集。
+* setValueTypeface(Typeface tf): 设置值标签的字体样式为此数据对象所包含的所有数据集。
+* setValueFormatter(ValueFormatter f): 设置自定义的ValueFormatter为此数据对象所包含的所有数据集。
+* setDrawValues(boolean enabled):打开或者关闭绘制的值（文本值）为此数据对象所包含的所有数据集。
+####Getters/Convenience
+* getDataSetByIndex(int index):返回在数据对象DataSet列表中给出的索引的数据集对象。
+* contains(Entry entry):检查数据对象是否包含指定的条目。如果是返回true，否则返回false。注意：在这一点上性能并不好，不要过度使用在性能要求高的的地方。
+* contains(T dataSet):如果数据对象包含提供的DataSet返回true，否则返回false
+####clearing
+* clearValues(): 清除所有DataSet对象的数据对象因而包括所有条目。不会删除提供的x值。
+
+###Data类详情
+这个wiki条目集中于ChartData类的子类。此处未提到的ChartData的所有其他子类不提供任何具体的增强功能。
+####BarData（类 BarData）
+* 设置不同的数据集对象的bars之间的空间占一个bar的宽度的百分比。100正好是一个bar的宽度，默认：80.
+* 如果数据对象被分组返回true（包括超过一个数据集），否则返回false。
+####ScatterData(类 ScatterData）
+* 返回所有ScatterDataSets这个数据对象包含的最大的外形尺寸。
+####PieData(类 PieData)
+* 返回为这个数据对象设置的PieDataSet对象。PieData对象不能包含多个PieDataSets。
+* 设置PieDataSet这个数据对象应该被呈现。
+####CombinedData(类 CombinedData）
+这个数据对象被设计用来包含所有其他数据对象的实例。使用setData（）方法来为这个对象提供数据。这只能被CombinedChart使用。
+里面看上去像下面这样：
+
+            public class CombinedData extends ChartData {
+            
+                // ...
+            
+                public CombinedData(List<String> xVals) { ... }
+            
+                public CombinedData(String[] xVals) { ... }
+            
+                public void setData(LineData data) { ... }
+            
+                public void setData(BarData data) { ... }
+            
+                public void setData(ScatterData data) { ... }
+            
+                public void setData(CandleData data) { ... }
+            
+                // ...
+            }
+            
+###DataSet类
+DataSet类是所有data-set类（子类）的基类，像LineDataSet，BarDataSet,...等等。  
+
+        public class DataSet extends LineDataSet { ...
+    
+DataSet类代表一组或者一种类型的条目中关系比较近的图表。它被设计用来区分在图表中逻辑上不同组的值（例如在LineChart中的具体行的值，或者在BarChart中的具体组的值）。
+下面提到的方法被实现在DataSet类中因此也能被用在其所有的子类中
+####数据样式
+* setValueTextColor(int color):设置文本值（值标签被绘制的颜色）的颜色为这个数据对象包含的所有数据集。
+* setValueTextSize(float size): 设置文本值（以dp为单位）的字体大小为此数据对象所包含的所有数据集。
+* setValueTypeface(Typeface tf): 设置值标签的字体样式为此数据对象所包含的所有数据集。
+* setValueFormatter(ValueFormatter f): 设置自定义的ValueFormatter为此数据对象所包含的所有数据集。
+* setDrawValues(boolean enabled):打开或者关闭绘制的值（文本值）为此数据对象所包含的所有数据集。   
+
+如果在整个数据对象（不是data-set）中有相同的颜色，你可以只调用上述之一提到的ChartData对象。
+####Getters/Convenience
+* contains(Entry entry):检查数据对象是否包含指定的条目。如果是返回true，否则返回false。注意：在这一点上性能并不好，不要过度使用在性能要求高的的地方。
+
+###DataSet类详细说明
+这个wiki条目集中于DataSet类的子类。此处未提到的ChartData的所有其他子类不提供任何具体的增强功能。
+####Line-, Bar-, Scatter- & CandleDataSet （下面提到的方法能被用在任何提到的DataSet类中）
+* setHighLightColor(int color): 设置用来高亮显示的颜色。不要忘记使用getResources().getColor(...) 或者Color.rgb(...) (或者简单的 Color.BLACK)来获取颜色。
+####Line- & RadarDataSet(只适用于LineDataSet 和 RadarDataSet的方法）
+* setFillColor(int color): 设置用来填充线表面的颜色。
+* setFillAlpha(int alpha): 设置阿尔法值（透明度）用来填充线表面（0-255），默认：85, 255代表完全不透明，0代表完全透明。
+* setDrawFilled(boolean filled): 设置为true，如果数据集应该被绘制填充（表面，区域），并不只是作为线，急用这将会得到极大的性能提升！默认：false
+* setLineWidth(float width):设置线宽为数据集（最小值0.2f，最大值10f）;默认1f 注意：细线可以带来更好的性能，出线会有比较差的性能。
+下面提到的方法只应用于具体提到的DataSet子类。
+####LineDataSet（类LineDataSet）
+* setCircleSize(float size): 设置圆形指标线的大小（半径），默认大小为4f
+* setDrawCircles(boolean enabled):设置为true为打开绘制圆为LineDataSet，默认true
+* setDrawCubic(boolean enabled):如果设置为true，linechart线被绘制在立方体中，代替linear。这对性能有负面影响！ 默认：false
+* setCubicIntensity(float intensity):为立方线设置强度（如果打开的话）。最大值1f代表高立方效果，最小值0.05f代表低立方效果。默认：0.2f
+* setCircleColor(int color): 为这个数据集应该有的所有圆设置颜色。
+* setCircleColors(List colors): 为这个数据集的圆外设置颜色。也有各种各样的其他方法为设置愿的颜色。
+* setCircleColorHole(int color): 设置圆内的颜色（洞内）
+* setDrawCircleHole(boolean enabled):设置这个为true允许在这个数据集的每个圆内绘制一个洞。如果设置为false，圆将被绘制填满（没有洞）
+* enableDashedLine(float lineLength, float spaceLength, float phase): 在虚线模式下打开线被绘制。例如像这“----------”“lineLength”是部分线的长度。“spaceLength”是两个部分之间的空间。“phase”是偏移，以度为单位（正常情况下，使用0）
+####BarDataSet(类 BarDataSet）
+* setBarSpacePercent(float percent):设置bars之间的空间占bar总宽度的百分比。
+* setBarShadowColor(int color): 设置用来绘制的bar影子的颜色。bar的影子在表面代表在bar后面指示的最大值。不要忘记使用getResources().getColor(...) 或者Color.rgb(...) (或者简单的 Color.BLACK)来获取颜色。
+* setHighLightAlpha(int alpha): 设置被用来绘制高亮指示的bar阿尔法值（透明度）。255代表完全不透明，0代表完全透明。
+* setStackLabels(String[] labels): 设置标签为bar-stacks的不同的值，在这种情况下有一个。
+####ScatterDataSet（类 ScatterDataSet）
+* setScatterShapeSize(float size): 设置将要绘制的scattershape的像素的大小，这仅适用于非自定义的形状。
+* setScatterShape(ScatterShape shape):设置图形被绘制的位置在值出现的地方。
+####CandleDataSet（类 CandleDataSet）
+* setBodySpace(float space): 在每个柱状的左侧和右侧设置空间，默认0.1f（10%），最大值0.45f， 最小值0f
+* setShadowWidth(float width):设置candle-shadow-line的宽度以dp为单位。默认3f。
+####PieDataSet（类 PieDataSet）
+* setSliceSpace(float degrees): 设置piechart-slices左侧之间的空间。默认：0’-->没有空间，最大值45,最小值0（没有空间）。
+* setSelectionShift(float shift):设置距离图表中心的数据集的高亮部分的饼图的距离，默认12f
+###其他项
+####图表内容
+* clear(): 清除图表的所有数据（通过设置数据对象为null）。调用invalidate（）来刷新图表。
+* clearValues():清除所有数据集对象的图表包括所有条目。不会删除提供的x值。调用invalidate（）来刷新图表。
+* isEmpty(): 如果图表数据为null返回true，或者如果它没有条目。
+####有用的getter方法
+* getData():返回你为图表设置的数据对象。
+* getViewPortHandler():返回图表的ViewPortHandler对象，它包含一些关于图表大小和边界的信息（偏移，内容区域）。
+* getRenderer(): 返回负责绘制图表数据的主要的DataRenderer
+* getCenter():返回整个图表视图的中心点。
+* getCenterOffsets():返回图表绘图区的中心点。
+* getAverage(): 返回图表包含的所有值的平均值。
+* getPercentOfTotal(float value):返回所提供的值在图表内占总和的百分比。
+* getValueCount(): 返回图表拥有数据的总数。
+* getValueSum(): 返回在图表内所有值的和。
+* getYMin(): 返回图表数据的最小值。
+* getYMax(): 返回图表数据的最大值。
+####一些更多的方法（Chart类的）
+* saveToGallery(String title)：保存当前数据状态作为一张图片到图库。
+* saveToPath(String title, String pathOnSD):保存当前图表状态作为一张图片到指定路径。
+* getChartBitmap():返回bitmap对象来呈现图表，这个Bitmap总是包含最新的图表的绘制状态。
+* setHardwareAccelerationEnabled(boolean enabled): 允许打开或者关闭硬件加速为图表，只支持API11以上。
