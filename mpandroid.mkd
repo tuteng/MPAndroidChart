@@ -365,10 +365,6 @@ ColorTemplate例子：
         
 如果没有颜色被设置对于数据集，默认颜色被使用
 
-###指定图表设置    
-
-在第一章1. Getting Started 图表设置和样式方法可以被用于所有提到的图表类型。这章将集中于指定设置对于专有的图表类型。
-
 ###数据格式化
 这个ValueFormatter接口可以用来创建定制格式化程序类允许格式化图标中的数据或这Y轴上的数据。
 
@@ -453,7 +449,8 @@ ColorTemplate例子：
 ###动态和实时数据   
 
 为了动态增加或者移除数据到图表，有多种方法允许你增加或者移除条目对象到一个存在的数据集或者从数据集对象到一个存在的ChartData对象。  
-类DataSet（和所有的子类）：
+
+####类DataSet（和所有的子类）：
 
 * addEntry（Entry e): 增加给出的条目对象到DataSet   
 
@@ -478,7 +475,34 @@ ColorTemplate例子：
 
 ###修改Viewport    
 
-* fitScreen(): 重置所有的缩放和拖动使图表完全适合它的边界。    
+这个库包含各种方法修改视口，请注意这些方法仅适用于LineChart, BarChart, ScatterChart and CandleStickChart。
+
+请注意所有修改视口方法调需要在图标设置数据之后。
+
+####约束显示什么
+
+* setVisibleXRange(float xRange): 设置区域的大小(范围在x轴)。例如设置了10，没有超过10的值在x轴上可查看不需要滚动
+* setVisibleYRange(float yRange, AxisDependency axis): 设置区域的大小(范围在y轴)。你同样需要提供轴此约束应适用于。
+* setViewPortOffsets(float left, float top, float right, float bottom):设定对当前视口的自定义便宜（对于图标窗口边的实际偏移），设置这个将防止图表自动计算他的偏移。使用resetViewPortOffsets()取消这个设置。
+resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏移。允许图标再次自动计算所有偏移。
+
+####移动视图
+
+* fitScreen(): 重置所有的缩放和拖动使图表完全适合它的边界。 
+* moveViewToX(float xIndex): 移动当前视口的左侧（边缘）到指定的x索引
+* moveViewToY(float yValue, AxisDependency axis): 中心视口提供的y轴上指定的y值(左侧或右侧)。
+* moveViewTo(float xIndex, float yValue, AxisDependency axis): 这将移动当前视口的左侧（边缘）到指定的x索引在x轴上，并且中心视口提供的y轴上指定的y值（相当于结合了setVisibleXRange(...)和setVisibleYRange(...)）
+* centerViewTo(int xIndex, float yValue, AxisDependency axis): 这会将当前视区的中心移动到指定的x指数和y值（相当于结合了setVisibleXRange(...)和 setVisibleYRange(...)）
+
+ 完整例子：
+			chart.setData(...); // first set data
+
+			// now modify viewport
+			chart.setVisibleXRange(20); // allow 20 values to be displayed on the x-axis
+			chart.moveViewToX(10); // set the left edge of the chart to x-index 10
+
+			// refresh
+			chart.invalidate();
 
 ###动画   
 
