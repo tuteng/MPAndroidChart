@@ -42,7 +42,7 @@
 * setDrawBorders(boolean enabled):打开或关闭绘制的图表边框。（环绕图表的线）
 * setBorderColor(int color):设置图表边框线的颜色。
 * setBorderWidth(float width)： 设置图表边框线的宽度。
-* setMaxVisibleValueCount(int count): 设置一个数字用于图标中显示绘制的值标签。这仅作用于当setDrawValues()允许时。
+* setMaxVisibleValueCount(int count): 设置一个数字用于图表中显示绘制的值标签。这仅作用于当setDrawValues()允许时。
 
 ###与图表交互   
 
@@ -56,12 +56,17 @@
 * setScaleXEnabled(boolean enabled): 打开或关闭x轴的缩放
 * setScaleYEnabled(boolean enabled): 打开或关闭y轴的缩放。
 * setPinchZoom(boolean enabled): 如果设置为true，挤压缩放被打开。如果设置为false，x和y轴可以被单独挤压缩放。
-* setHighlightEnabled(boolean enabled): 如果设置为true，在图表中通过触屏高亮或选择值是可能的
+* setHighlightEnabled(boolean enabled): 如果设置为true，在图表中通过触屏高亮或选择值是可能的。
+* setHighlightPerDragEnabled(boolean enabled): 设置为true时允许高亮显示拖动结束的对象在缩放到最下时。默认：true
 * setHighlightIndicatorEnabled(boolean enabled): 如果设置为true， 指标线（或杆）将展示被选择的线的绘制的值。
 
 ####通过编程自动高亮   
 
-* highlightValues(Highlight[] highs):  突出显示给定索引处的值在被给定的数据集中。提供null或空的数组将测消所有的高亮。   
+* highlightValues(Highlight[] highs):  突出显示给定索引处的值在被给定的数据集中。提供null或空的数组将取消所有的高亮。
+* highlightValues(Highlight[] highs): 突出显示给定xIndex为索引在被给定的数据集中。提供-1时将去取消所有的高亮
+* getHighlighted(): 返回一个Highlight[]数组包含所有高亮实体信息，他们的 x-index 和dataset-index。
+
+编程自动高亮将不产生OnChartValueSelectedListener回调
 
 ####选择回调  
 
