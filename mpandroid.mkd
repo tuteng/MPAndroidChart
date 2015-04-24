@@ -64,7 +64,7 @@
 
 * highlightValues(Highlight[] highs):  突出显示给定索引处的值在被给定的数据集中。提供null或空的数组将取消所有的高亮。
 * highlightValues(Highlight[] highs): 突出显示给定xIndex为索引在被给定的数据集中。提供-1时将去取消所有的高亮
-* getHighlighted(): 返回一个Highlight[]数组包含所有高亮实体信息，他们的 x-index 和dataset-index。
+* getHighlighted():返回一个Highlight[]的数组包含关于所有高亮入口的信息，它们的x-索引和数据集的索引。
 
 编程自动高亮将不产生OnChartValueSelectedListener回调
 
@@ -134,14 +134,98 @@ OnChartGestureListener将允许你对图表上的手势作出反应：
 让你的类接收回调实现这个接口并设置它作为图表的一个listener
     
             chart.setOnChartGestureListener(this);
-            
-####得到所有的高亮   
-
-* getHighlighted()：返回一个Highlight[]的数组包含关于所有高亮入口的信息，它们的x-索引和数据集的索引。
     
+###The Axis(AxisBase)
+此页关注AxisBase类，他是XAxis和YAxis的基类。
+
+下面提及的方法在两个轴上都能使用。
+
+这个轴类允许对下面的组件或部分指定具体的样式：
+
+* 标签（绘制时垂直对齐），包括轴的描述值。
+* 坐标轴，它直接被绘制平行于标签旁边。
+* 网格线，每个来自水平方向的标签轴。
+* LimitLines,允许呈现具体的信息，像边框或者限制。  
+
+####控制轴的哪部分应该被绘制   
+
+* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
+* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
+* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
+* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。 
+
+####修改轴线样式   
+
+* setTextColor(int color): 设置轴标签的颜色。
+* setTextSize(float size):设置轴标签的字体大小以dp为单位。
+* setTypeface(Typeface tf):设置轴标签的自定义Typeface
+* setGridColor(int color): 设置这个轴的网格线颜色。
+* setGridLineWidth(float width):设置轴的网格线宽度。
+* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
+* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。
+* enableGridDashedLine(float lineLength, float spaceLength, float phase): 激活网格线虚线模式，有点像"- - - - - -"。"lineLength"控制短线条的长度，"spaceLength"控制两段线之间的间隔长度，"phase"控制开始的点。
+
+####限制线   
+
+两个轴支持LimitLines的调用允许呈现专用信息，像边界或者约束。LimitLines添加到YAxis会在水平方向绘制，垂直方向绘制需要添加到XAxis。下面是你如何增加和移除LimitLines从YAxis：
+
+* addLimitLine(LimitLine l): 添加一个新的LimitLine到轴上。
+* removeLimitLine(LimitLine l): 从轴上移除一个指定的LimitLine。
+多个方法也适用于添加或者移除。
+* setDrawLimitLinesBehindData(boolean enabled): 允许控制Z轴顺序在LimitLines和真实数据之间。如果设置true，LimitLines绘制在真实数据后面，否则在上面，默认：false
+
+限制线（类 LimitLine）（也称为指示线）是明确和简单的线能给使用者提供额外的信息。 
+
+这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。  
+
+ 例子：  
+			YAxis leftAxis = chart.getAxisLeft();
+
+			LimitLine ll = new LimitLine(140f, "Critical Blood Pressure");
+			ll.setLineColor(Color.RED);
+			ll.setLineWidth(4f);
+			ll.setTextColor(Color.BLACK);
+			ll.setTextSize(12f);
+			// .. and more styling options
+
+			leftAxis.addLimitLine(ll);
+
+###XAxis (XLabels)    
+
+这个XAxis是AxisBase的子类
+
+XAxis类（在2.0.0之前是XLabels),是一切与水平轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList<String> 或者 String[]和交给ChartData对象的是什么。    
+XAxis类允许对下面的组件或部分指定具体的样式：
+
+* 标签（绘制时水平对齐），包括轴的描述值，这些包括提供的数据对象你为图表设置的（x轴的值）
+* 坐标轴，它直接被绘制平行于标签旁边。
+* 网格线，每个来自垂直方向的标签轴。
+
+为了取得XAxis类的实例，调用下面的方法：     
+
+            XAxis xAxis = chart.getXAxis();   
+
+####自定义轴线的值    
+
+* setAdjustXLabels(boolean enabled):如果被设置为true，x轴条目将依赖于它自己在进行缩放的时候。如果设置为false，x轴条目将总是保持相同。
+* setAvoidFirstLastClipping(boolean enabled):如果设置为true，图表将避免第一个和最后一个标签条目被减掉在图表或屏幕的边缘。
+* setSpaceBetweenLabels(int characters): 设置x轴标签之间的空间字符数，默认是4个。
+* setPosition(XAxisPosition pos):设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。   
+
+例子：
+    
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxisPosition.BOTTOM);
+            xAxis.setTextSize(10f);
+            xAxis.setTextColor(Color.RED);
+            xAxis.setDrawAxisLine(true);
+            xAxis.setDrawGridLines(false);
+            // and more...
+	
+	
 ###YAxis(YLabels)
 
-YAxis类（在2.0.0之前是Ylabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter or CandleStickChart都有一个左和一个右的YAxis对象，分别负责左边或者右边。RadarChart只有一个YAxis。默认，图表的所有轴在被绘制的时候都被打开。
+YAxis类（在2.0.0之前是Ylabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter or CandleStickChart都有一个左和一个右的YAxis对象，分别负责左边或者右边。RadarChart只有一个YAxis。默认，图表的所有轴在被绘制的时候都被绘制。
 YAxis类允许对下面的组件或部分指定具体的样式：
 
 * 标签（绘制时垂直对齐），包括轴的描述值。
@@ -158,24 +242,7 @@ YAxis类允许对下面的组件或部分指定具体的样式：
             
             YAxis yAxis = radarChart.getYAxis(); // this method radarchart only
     
-在运行时刻，使用 public AxisDependency getAxisDependency()来确定图表轴呈现的边。    
-
-####控制轴的哪部分应该被绘制   
-
-* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
-* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
-* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
-* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。   
-
-####修改轴线样式   
-
-* setTextColor(int color): 设置轴标签的颜色。
-* setTextSize(float size):设置轴标签的字体大小以dp为单位。
-* setTypeface(Typeface tf):设置轴标签的自定义Typeface
-* setGridColor(int color): 设置这个轴的网格线颜色。
-* setGridLineWidth(float width):设置轴的网格线宽度。
-* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
-* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。    
+在运行时刻，使用 public AxisDependency getAxisDependency()来确定图表轴呈现的边。     
 
 ####自定义轴线的值    
 
@@ -218,78 +285,6 @@ YAxis类允许对下面的组件或部分指定具体的样式：
             yAxis .setTextSize(12f); // set the textsize
             yAxis.setValueFormatter(new MyValueFormatter());
             //... and more
-
-####限制线   
-
-YAxis支持LimitLines的调用允许呈现专用信息，像边框或者约束条件。下面是你如何增加和移除LimitLines从YAxis：
-
-*  addLimitLine(LimitLine l):增加一个新的LimitLines为这个轴。  
-*  removeLimitLine(LimitLine l):移除指定的LimitLines从此轴。  
-*  多个方法也适用于添加或者移除。    
-  
-
-限制线（类 LimitLine）（也称为指示线）是明确和简单的线能给使用者提供额外的信息。  
-这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。        
- 
- 例子：  
-     
-            YAxis leftAxis = chart.getAxisLeft();
-        
-            LimitLine ll = new LimitLine(140f, "Critical Blood Pressure");
-            ll.setLineColor(Color.RED);
-            ll.setLineWidth(4f);
-            ll.setTextColor(Color.BLACK);
-            ll.setTextSize(12f);
-            // .. and more styling options
-            
-            leftAxis.addLimitLine(ll);
-     
-###XAxis (XLabels)    
-
-XAxis类（在2.0.0之前是XLabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList模板 或者 String[]和交给ChartData对象的是什么。    
-XAxis类允许对下面的组件或部分指定具体的样式：
-
-* 标签（绘制时水平对齐），包括轴的描述值，这些包括提供的数据对象你为图表设置的（x轴的值）
-* 坐标轴，它直接被绘制平行于标签旁边。
-* 网格线，每个来自垂直方向的标签轴。
-
-为了取得XAxis类的实例，调用下面的方法：     
-
-            XAxis xAxis = chart.getXAxis();
- 
-####控制轴的哪部分应该被绘制    
-
-* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
-* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
-* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
-* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。   
-
-####修改轴线样式     
-
-* setTextColor(int color): 设置轴标签的颜色。
-* setTextSize(float size):设置轴标签的字体大小以dp为单位。
-* setTypeface(Typeface tf):设置轴标签的自定义Typeface
-* setGridColor(int color): 设置这个轴的网格线颜色。
-* setGridLineWidth(float width):设置轴的网格线宽度。
-* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
-* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。    
-
-####自定义轴线的值    
-
-* 如果被设置为true，x轴条目将依赖于它自己在进行缩放的时候。如果设置为false，x轴条目将总是保持相同。
-* 如果设置为true，图表将避免第一个和最后一个标签条目被减掉在图表或屏幕的边缘。
-* 设置x轴标签之间的空间字符数，默认是4个。
-* 设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。   
-
-例子：
-    
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxisPosition.BOTTOM);
-            xAxis.setTextSize(10f);
-            xAxis.setTextColor(Color.RED);
-            xAxis.setDrawAxisLine(true);
-            xAxis.setDrawGridLines(false);
-            // and more...
         
 ###设置数据    
 
