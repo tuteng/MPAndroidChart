@@ -32,12 +32,17 @@
 
 * setBackgroundColor(int color)：设置背景颜色这将覆盖整个图表项目视图。另外，一个背景颜色能被设置在.xml的布局文件中
 * setDescription(String desc):设置一个描述文本出现在图表的右下角。
-* setNoDataTextDescription(String desc): 设置文本应该出现如果图标为空。
+* setDescriptionColor(int color): 设置描述文本的颜色。
+* setDescriptionPosition(float x, float y): 设置一个自定义坐标用于定位描述文本在屏幕上的像素。
+* setDescriptionTypeface(Typeface t): 设置采用Typeface来绘制买描述文本。
+* setDescriptionTextSize(float size): 设置描述文本的像素尺寸，最小6f，最大16f。
+* setNoDataTextDescription(String desc): 设置图表为空时出现的文本。
 * setDrawGridBackground(boolean enabled): 如果打开，背景矩形将出现在已经画好的绘图区域的后边。
 * setGridBackgroundColor(int color): 设置网格背景颜色。
 * setDrawBorders(boolean enabled):打开或关闭绘制的图表边框。（环绕图表的线）
 * setBorderColor(int color):设置图表边框线的颜色。
 * setBorderWidth(float width)： 设置图表边框线的宽度。
+* setMaxVisibleValueCount(int count): 设置一个数字用于图标中显示绘制的值标签。这仅作用于当setDrawValues()允许时。
 
 ###与图表交互   
 
