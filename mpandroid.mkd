@@ -257,26 +257,6 @@ YAxis类允许对下面的组件或部分指定具体的样式：
 * setShowOnlyMinMax(boolean enabled): 如果打开了，这个轴将展示出它的最小值和最大值。这将忽略或者覆盖定义过的label-count。
 * setPosition(YAxisLabelPosition pos):设置轴标签应该被绘制的位置。INSIDE_CHART或者OUTSIDE_CHART中的一个。
 自定义影响轴的数值范围应该在图表被设置数据之前应用。    
-
-####自定义轴标签式    
-
-* 对此轴设置一个自定义的 ValueFormatter 。这个接口允许格式化或者修改原始标签文本和代替返回一个自定义的文本。   
-
-自定义格式化的例子：   
-    
-            public class MyValueFormatter implements ValueFormatter {
-            
-                private DecimalFormat mFormat;
-            
-                public MyValueFormatter() {
-                    mFormat = new DecimalFormat("###,###,##0.0"); // use one decimal
-                }
-            
-                @Override
-                public String getFormattedValue(float value) {
-                    return mFormat.format(value) + " $"; // append a dollar-sign
-                }
-            }
         
 代码例子：
             
@@ -388,6 +368,38 @@ ColorTemplate例子：
 ###指定图表设置    
 
 在第一章1. Getting Started 图表设置和样式方法可以被用于所有提到的图表类型。这章将集中于指定设置对于专有的图表类型。
+
+###数据格式化
+这个ValueFormatter接口可以用来创建定制格式化程序类允许格式化图标中的数据或这Y轴上的数据。
+
+使用ValueFormatter仅需要创建一个新的类和实现他的接口并且从getFormattedValue(float value)返回任何你想要显示的文本。
+
+自定义格式化的例子：   
+    
+            public class MyValueFormatter implements ValueFormatter {
+            
+                private DecimalFormat mFormat;
+            
+                public MyValueFormatter() {
+                    mFormat = new DecimalFormat("###,###,##0.0"); // use one decimal
+                }
+            
+                @Override
+                public String getFormattedValue(float value) {
+                    return mFormat.format(value) + " $"; // append a dollar-sign
+                }
+            }
+
+然后设置你需要格式化的YAxis, ChartData或者DataSet对象:
+
+			// usage on axis
+			yAxis.setValueFormatter(new MyValueFormatter());
+
+			// usage on whole data object
+			lineData.setValueFormatter(new MyValueFormatter());
+
+			// usage on individual dataset object
+			lineDataSet.setValueFormatter(new MyValueFormatter());
 
 ###图例   
 
