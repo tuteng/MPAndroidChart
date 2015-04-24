@@ -506,6 +506,10 @@ resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏�
 
 ###动画   
 
+注意：动画只能工作在API级别11(Android 3.0.x)或更高
+
+在低版本Android使用，动画将不执行（但是也不奔溃）
+
 所有的图表类型都支持动画，那能被用来创建图表以一种很酷的方式。有三种类型的动画方法存在通过x轴，y轴或者两个轴来区分：
 * animateX(int durationMillis):动画的图表值在水平轴，意味着图标将在指定的时间从左到右建立。
 * animateY(int durationMillis):动画图表值在y轴，意味着图表将在指定的时间内从下到上构建。
@@ -519,10 +523,43 @@ resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏�
      
 如果animate（...)（任何类）被调用,不用再调用invalidate()来刷新图表。   
 
-####注意    
+####动画缓冲
 
-由于nineoldandroid-library的移除，动画不能在 Android 3.0 （API 级别 11） 以前的版本工作。然而，这并不会导致应用程序崩溃。调用上面提到的动画方法将不会做什么在这种情况下。
+这个库允许你为你的动画使用好的缓冲函数。你能选着下面预定义的静态Easing.EasingOption
 
+		public enum EasingOption {
+			  Linear,
+			  EaseInQuad,
+			  EaseOutQuad,
+			  EaseInOutQuad,
+			  EaseInCubic,
+			  EaseOutCubic,
+			  EaseInOutCubic,
+			  EaseInQuart,
+			  EaseOutQuart,
+			  EaseInOutQuart,
+			  EaseInSine,
+			  EaseOutSine,
+			  EaseInOutSine,
+			  EaseInExpo,
+			  EaseOutExpo,
+			  EaseInOutExpo,
+			  EaseInCirc,
+			  EaseOutCirc,
+			  EaseInOutCirc,
+			  EaseInElastic,
+			  EaseOutElastic,
+			  EaseInOutElastic,
+			  EaseInBack,
+			  EaseOutBack,
+			  EaseInOutBack,
+			  EaseInBounce,
+			  EaseOutBounce,
+			  EaseInOutBounce,
+		  }
+
+		  
+		  
 ###MarkerView     
 
 MakerView类能被任何用户创建的类扩展为了展示自定义的（弹窗）View无论何时要在图表中高亮一个值。   
