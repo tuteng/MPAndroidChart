@@ -401,6 +401,15 @@ ColorTemplate例子：
 			// usage on individual dataset object
 			lineDataSet.setValueFormatter(new MyValueFormatter());
 
+###特殊图表设置
+
+在章节1的通用图标设置和样式函数适用于所有之前提及的图表类型。这个章节关注特殊设置用于独特的图标类型。
+
+####饼图
+	
+* setDrawSliceText(boolean enabled): 设置这个为true是绘制x轴的值文本在饼图切片上。
+* setUsePercentValues(boolean enabled): 如果设置为true，图标显示数据的百分比而不是他们的原始数据。数据提供了ValueFormatter情况下会格式化百分比数据。
+	
 ###图例   
 
 默认，所有的图表类型支持图例并且将自动生成绘制出图例在为图表设置数据之后。图例通常包含多种条目每个标签代表一个形状。   
