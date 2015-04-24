@@ -298,14 +298,14 @@ YAxis类允许对下面的组件或部分指定具体的样式：
             public LineData(ArrayList<String> xVals, ArrayList<LineDataSet> sets) { ... }
             
 因此，什么是DataSet为什么需要它？那实际上相当简单。在图表内互相在一起的数据集对象表示一组条目（数据条目类型）。它被设计用来区分在图表中逻辑上不同组的值。对于每种类型的图表，扩展数据集 （例如 LineDataSet） 的不同对象存在允许特定的样式。
-作为一个例子，你可能想用LineChart展示两个不同公司的季度收入在一年中的。在这种情况下，建议你创建两个不同的LineDataSet对象，每个包含四个指（每个占四分之一）。用ArrayList来描述x轴上的标签，你可以简单的提供四个字符串“1.Q”,“2.Q”,“3.Q”,“4.Q"   
+作为一个例子，你可能想用LineChart展示两个不同公司的季度收入在一年中的。在这种情况下，建议你创建两个不同的LineDataSet对象，每个包含四个值（每个代表一个季度）。用ArrayList来描述x轴上的标签，你可以简单的提供四个字符串“1.Q”,“2.Q”,“3.Q”,“4.Q"   
 当然，你只提供一个包含两个公司8个值的LineDataSet对象也是可以的。    
    
 那么怎么设置一个LinDataSet对象呢？      
 
              public LineDataSet(ArrayList<Entry> yVals, String label) { ... }   
      
-在查找构造函数时（不同的构造函数可用），它是可见的，LinedataSet需要一个ArrayList条目类型和一个字符串用来描述LineDataSet以及用于图标标签。更进一步这个标签能被用来寻找在LineData对象中除LineDataSet对象外的其他LineDataSet。
+在查找构造函数时（不同的构造函数可用），它是可见的，LinedataSet需要一个ArrayList条目类型和一个字符串用来描述LineDataSet以及用于图表标签。更进一步这个标签能被用来寻找在LineData对象中除LineDataSet对象外的其他LineDataSet。
 ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装它周围的值还保存了它自己的值，它的位置在x轴（在LineData对象的字符串类型的ArrayList里面值的索引被映射）：    
 
              public Entry(float val, int xIndex) { ... }
