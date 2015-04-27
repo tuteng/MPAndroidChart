@@ -706,17 +706,17 @@ ChartData类是所有数据类的基类（子类），像LineData，BarData，..
 
 ####BarData（类 BarData）  
 
-* 设置不同的数据集对象的bars之间的空间占一个bar的宽度的百分比。100正好是一个bar的宽度，默认：80.
-* 如果数据对象被分组返回true（包括超过一个数据集），否则返回false。   
+* setGroupSpace(float percent): 设置不同的数据集对象的bars之间的空间占一个bar的宽度的百分比。100正好是一个bar的宽度，默认：80.
+*  isGrouped(): 如果数据对象被分组返回true（包括超过一个数据集），否则返回false。   
 
 ####ScatterData(类 ScatterData）   
 
-* 返回所有ScatterDataSets这个数据对象包含的最大的外形尺寸。   
+* getGreatestShapeSize(): 返回所有ScatterDataSets这个数据对象包含的最大的外形尺寸。   
 
 ####PieData(类 PieData)   
 
-* 返回为这个数据对象设置的PieDataSet对象。PieData对象不能包含多个PieDataSets。
-* 设置PieDataSet这个数据对象应该被呈现。  
+* getDataSet(): 返回为这个数据对象设置的PieDataSet对象。PieData对象不能包含多个PieDataSets。
+* setDataSet(PieDataSet set): 设置PieDataSet这个数据对象应该被呈现。  
 
 ####CombinedData(类 CombinedData）  
 
