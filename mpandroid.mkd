@@ -558,7 +558,40 @@ resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏�
 			  EaseInOutBounce,
 		  }
 
+基本上有两种缓冲动画：
+
+1、预定义缓冲动画：（这些代码可以运行在任何安卓版本）
+
+		public void animateY(int durationmillis, Easing.EasingOption option); 
+
+使用预定义缓冲选项调用任何动画方法
+
+		// animate both axes with easing
+		mChart.animateY(3000, Easing.EasingOption.EaseOutBack); 
+		
+在安卓3.0（API Level 11）以下版本总是使用Easing.EasingOption为预定义缓冲动画。
+
+2、自定义缓冲函数：（自定义缓冲函数在安卓3.0以下会奔溃）
+
+		public void animateY(int durationmillis, EasingFunction function); 
+		
+创建自定义缓冲动画通过创建你自己的缓冲函数和实现EasingFunction接口：
+
+		 /**
+		  * Interface for creating custom made easing functions. 
+		  */
+		  public interface EasingFunction {
+			 /**
+			  * Called everytime the animation is updated.
+			  * @param input - the time passed since the animation started (value between 0 and 1)
+			  */
+			  public float getInterpolation(float input);
+		  }
 		  
+下面是调用这个的方法（注意，这个运行在安卓3.0以下会奔溃）
+
+		 // animate both axes with easing
+		 mChart.animateY(3000, new MyEasingFunction()); 
 		  
 ###MarkerView     
 
