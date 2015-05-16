@@ -508,7 +508,7 @@ resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏�
 
 注意：动画只能工作在API级别11(Android 3.0.x)或更高
 
-在低版本Android使用，动画将不执行（但是也不奔溃）
+在低版本Android使用，动画将不执行（但是也不崩溃）
 
 所有的图表类型都支持动画，那能被用来创建图表以一种很酷的方式。有三种类型的动画方法存在通过x轴，y轴或者两个轴来区分：
 * animateX(int durationMillis):动画的图表值在水平轴，意味着图标将在指定的时间从左到右建立。
@@ -571,7 +571,7 @@ resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏�
 		
 在安卓3.0（API Level 11）以下版本总是使用Easing.EasingOption为预定义缓冲动画。
 
-2、自定义缓冲函数：（自定义缓冲函数在安卓3.0以下会奔溃）
+2、自定义缓冲函数：（自定义缓冲函数在安卓3.0以下会崩溃）
 
 		public void animateY(int durationmillis, EasingFunction function); 
 		
