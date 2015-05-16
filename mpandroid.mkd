@@ -32,12 +32,17 @@
 
 * setBackgroundColor(int color)：设置背景颜色这将覆盖整个图表项目视图。另外，一个背景颜色能被设置在.xml的布局文件中
 * setDescription(String desc):设置一个描述文本出现在图表的右下角。
-* setNoDataTextDescription(String desc): 设置文本应该出现如果图标为空。
+* setDescriptionColor(int color): 设置描述文本的颜色。
+* setDescriptionPosition(float x, float y): 设置一个自定义坐标用于定位描述文本在屏幕上的像素。
+* setDescriptionTypeface(Typeface t): 设置采用Typeface来绘制买描述文本。
+* setDescriptionTextSize(float size): 设置描述文本的像素尺寸，最小6f，最大16f。
+* setNoDataTextDescription(String desc): 设置图表为空时出现的文本。
 * setDrawGridBackground(boolean enabled): 如果打开，背景矩形将出现在已经画好的绘图区域的后边。
 * setGridBackgroundColor(int color): 设置网格背景颜色。
 * setDrawBorders(boolean enabled):打开或关闭绘制的图表边框。（环绕图表的线）
 * setBorderColor(int color):设置图表边框线的颜色。
 * setBorderWidth(float width)： 设置图表边框线的宽度。
+* setMaxVisibleValueCount(int count): 设置一个数字用于图表中显示绘制的值标签。这仅作用于当setDrawValues()允许时。
 
 ###与图表交互   
 
@@ -51,12 +56,17 @@
 * setScaleXEnabled(boolean enabled): 打开或关闭x轴的缩放
 * setScaleYEnabled(boolean enabled): 打开或关闭y轴的缩放。
 * setPinchZoom(boolean enabled): 如果设置为true，挤压缩放被打开。如果设置为false，x和y轴可以被单独挤压缩放。
-* setHighlightEnabled(boolean enabled): 如果设置为true，在图表中通过触屏高亮或选择值是可能的
+* setHighlightEnabled(boolean enabled): 如果设置为true，在图表中通过触屏高亮或选择值是可能的。
+* setHighlightPerDragEnabled(boolean enabled): 设置为true时允许高亮显示拖动结束的对象在缩放到最下时。默认：true
 * setHighlightIndicatorEnabled(boolean enabled): 如果设置为true， 指标线（或杆）将展示被选择的线的绘制的值。
 
 ####通过编程自动高亮   
 
-* highlightValues(Highlight[] highs):  突出显示给定索引处的值在被给定的数据集中。提供null或空的数组将测消所有的高亮。   
+* highlightValues(Highlight[] highs):  突出显示给定索引处的值在被给定的数据集中。提供null或空的数组将取消所有的高亮。
+* highlightValues(Highlight[] highs): 突出显示给定xIndex为索引在被给定的数据集中。提供-1时将去取消所有的高亮
+* getHighlighted():返回一个Highlight[]的数组包含关于所有高亮入口的信息，它们的x-索引和数据集的索引。
+
+编程自动高亮将不产生OnChartValueSelectedListener回调
 
 ####选择回调  
 
@@ -124,14 +134,98 @@ OnChartGestureListener将允许你对图表上的手势作出反应：
 让你的类接收回调实现这个接口并设置它作为图表的一个listener
     
             chart.setOnChartGestureListener(this);
-            
-####得到所有的高亮   
-
-* getHighlighted()：返回一个Highlight[]的数组包含关于所有高亮入口的信息，它们的x-索引和数据集的索引。
     
+###The Axis(AxisBase)
+此页关注AxisBase类，他是XAxis和YAxis的基类。
+
+下面提及的方法在两个轴上都能使用。
+
+这个轴类允许对下面的组件或部分指定具体的样式：
+
+* 标签（绘制时垂直对齐），包括轴的描述值。
+* 坐标轴，它直接被绘制平行于标签旁边。
+* 网格线，每个来自水平方向的标签轴。
+* LimitLines,允许呈现具体的信息，像边框或者限制。  
+
+####控制轴的哪部分应该被绘制   
+
+* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
+* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
+* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
+* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。 
+
+####修改轴线样式   
+
+* setTextColor(int color): 设置轴标签的颜色。
+* setTextSize(float size):设置轴标签的字体大小以dp为单位。
+* setTypeface(Typeface tf):设置轴标签的自定义Typeface
+* setGridColor(int color): 设置这个轴的网格线颜色。
+* setGridLineWidth(float width):设置轴的网格线宽度。
+* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
+* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。
+* enableGridDashedLine(float lineLength, float spaceLength, float phase): 激活网格线虚线模式，有点像"- - - - - -"。"lineLength"控制短线条的长度，"spaceLength"控制两段线之间的间隔长度，"phase"控制开始的点。
+
+####限制线   
+
+两个轴支持LimitLines的调用允许呈现专用信息，像边界或者约束。LimitLines添加到YAxis会在水平方向绘制，垂直方向绘制需要添加到XAxis。下面是你如何增加和移除LimitLines从YAxis：
+
+* addLimitLine(LimitLine l): 添加一个新的LimitLine到轴上。
+* removeLimitLine(LimitLine l): 从轴上移除一个指定的LimitLine。
+多个方法也适用于添加或者移除。
+* setDrawLimitLinesBehindData(boolean enabled): 允许控制Z轴顺序在LimitLines和真实数据之间。如果设置true，LimitLines绘制在真实数据后面，否则在上面，默认：false
+
+限制线（类 LimitLine）（也称为指示线）是明确和简单的线能给使用者提供额外的信息。 
+
+这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。  
+
+ 例子：  
+			YAxis leftAxis = chart.getAxisLeft();
+
+			LimitLine ll = new LimitLine(140f, "Critical Blood Pressure");
+			ll.setLineColor(Color.RED);
+			ll.setLineWidth(4f);
+			ll.setTextColor(Color.BLACK);
+			ll.setTextSize(12f);
+			// .. and more styling options
+
+			leftAxis.addLimitLine(ll);
+
+###XAxis (XLabels)    
+
+这个XAxis是AxisBase的子类
+
+XAxis类（在2.0.0之前是XLabels),是一切与水平轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList<String> 或者 String[]和交给ChartData对象的是什么。    
+XAxis类允许对下面的组件或部分指定具体的样式：
+
+* 标签（绘制时水平对齐），包括轴的描述值，这些包括提供的数据对象你为图表设置的（x轴的值）
+* 坐标轴，它直接被绘制平行于标签旁边。
+* 网格线，每个来自垂直方向的标签轴。
+
+为了取得XAxis类的实例，调用下面的方法：     
+
+            XAxis xAxis = chart.getXAxis();   
+
+####自定义轴线的值    
+
+* setAdjustXLabels(boolean enabled):如果被设置为true，x轴条目将依赖于它自己在进行缩放的时候。如果设置为false，x轴条目将总是保持相同。
+* setAvoidFirstLastClipping(boolean enabled):如果设置为true，图表将避免第一个和最后一个标签条目被减掉在图表或屏幕的边缘。
+* setSpaceBetweenLabels(int characters): 设置x轴标签之间的空间字符数，默认是4个。
+* setPosition(XAxisPosition pos):设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。   
+
+例子：
+    
+            XAxis xAxis = chart.getXAxis();
+            xAxis.setPosition(XAxisPosition.BOTTOM);
+            xAxis.setTextSize(10f);
+            xAxis.setTextColor(Color.RED);
+            xAxis.setDrawAxisLine(true);
+            xAxis.setDrawGridLines(false);
+            // and more...
+	
+	
 ###YAxis(YLabels)
 
-YAxis类（在2.0.0之前是Ylabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter or CandleStickChart都有一个左和一个右的YAxis对象，分别负责左边或者右边。RadarChart只有一个YAxis。默认，图表的所有轴在被绘制的时候都被打开。
+YAxis类（在2.0.0之前是Ylabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter or CandleStickChart都有一个左和一个右的YAxis对象，分别负责左边或者右边。RadarChart只有一个YAxis。默认，图表的所有轴在被绘制的时候都被绘制。
 YAxis类允许对下面的组件或部分指定具体的样式：
 
 * 标签（绘制时垂直对齐），包括轴的描述值。
@@ -148,24 +242,7 @@ YAxis类允许对下面的组件或部分指定具体的样式：
             
             YAxis yAxis = radarChart.getYAxis(); // this method radarchart only
     
-在运行时刻，使用 public AxisDependency getAxisDependency()来确定图表轴呈现的边。    
-
-####控制轴的哪部分应该被绘制   
-
-* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
-* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
-* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
-* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。   
-
-####修改轴线样式   
-
-* setTextColor(int color): 设置轴标签的颜色。
-* setTextSize(float size):设置轴标签的字体大小以dp为单位。
-* setTypeface(Typeface tf):设置轴标签的自定义Typeface
-* setGridColor(int color): 设置这个轴的网格线颜色。
-* setGridLineWidth(float width):设置轴的网格线宽度。
-* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
-* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。    
+在运行时刻，使用 public AxisDependency getAxisDependency()来确定图表轴呈现的边。     
 
 ####自定义轴线的值    
 
@@ -180,26 +257,6 @@ YAxis类允许对下面的组件或部分指定具体的样式：
 * setShowOnlyMinMax(boolean enabled): 如果打开了，这个轴将展示出它的最小值和最大值。这将忽略或者覆盖定义过的label-count。
 * setPosition(YAxisLabelPosition pos):设置轴标签应该被绘制的位置。INSIDE_CHART或者OUTSIDE_CHART中的一个。
 自定义影响轴的数值范围应该在图表被设置数据之前应用。    
-
-####自定义轴标签式    
-
-* 对此轴设置一个自定义的 ValueFormatter 。这个接口允许格式化或者修改原始标签文本和代替返回一个自定义的文本。   
-
-自定义格式化的例子：   
-    
-            public class MyValueFormatter implements ValueFormatter {
-            
-                private DecimalFormat mFormat;
-            
-                public MyValueFormatter() {
-                    mFormat = new DecimalFormat("###,###,##0.0"); // use one decimal
-                }
-            
-                @Override
-                public String getFormattedValue(float value) {
-                    return mFormat.format(value) + " $"; // append a dollar-sign
-                }
-            }
         
 代码例子：
             
@@ -208,78 +265,6 @@ YAxis类允许对下面的组件或部分指定具体的样式：
             yAxis .setTextSize(12f); // set the textsize
             yAxis.setValueFormatter(new MyValueFormatter());
             //... and more
-
-####限制线   
-
-YAxis支持LimitLines的调用允许呈现专用信息，像边框或者约束条件。下面是你如何增加和移除LimitLines从YAxis：
-
-*  addLimitLine(LimitLine l):增加一个新的LimitLines为这个轴。  
-*  removeLimitLine(LimitLine l):移除指定的LimitLines从此轴。  
-*  多个方法也适用于添加或者移除。    
-  
-
-限制线（类 LimitLine）（也称为指示线）是明确和简单的线能给使用者提供额外的信息。  
-这是一个例子，你的图表可以展示已经用应用登录的用户的多种形式的血压测量结果。为了通知用户心动血压超过140mmhg被考虑会有健康风险，你可以增加一个LimitLine在140处来提供那条信息。        
- 
- 例子：  
-     
-            YAxis leftAxis = chart.getAxisLeft();
-        
-            LimitLine ll = new LimitLine(140f, "Critical Blood Pressure");
-            ll.setLineColor(Color.RED);
-            ll.setLineWidth(4f);
-            ll.setTextColor(Color.BLACK);
-            ll.setTextSize(12f);
-            // .. and more styling options
-            
-            leftAxis.addLimitLine(ll);
-     
-###XAxis (XLabels)    
-
-XAxis类（在2.0.0之前是XLabels),是一切与垂直轴相关的数据和信息的容器。每个 Line-, Bar-, Scatter CandleStickChart和 RadarChart 都有一个XAxis对象，XAxis将显为一个ArrayList模板 或者 String[]和交给ChartData对象的是什么。    
-XAxis类允许对下面的组件或部分指定具体的样式：
-
-* 标签（绘制时水平对齐），包括轴的描述值，这些包括提供的数据对象你为图表设置的（x轴的值）
-* 坐标轴，它直接被绘制平行于标签旁边。
-* 网格线，每个来自垂直方向的标签轴。
-
-为了取得XAxis类的实例，调用下面的方法：     
-
-            XAxis xAxis = chart.getXAxis();
- 
-####控制轴的哪部分应该被绘制    
-
-* setEnabled(boolean enabled):设置轴的打开或者关闭。如果关闭，坐标轴不会被绘制。
-* setDrawAxisLine(boolean enabled): 设置为true，如果线在轴的侧面应该被画，否则不。
-* setDrawGridLines(boolean enabled): 设置为true打开绘制网格线对于轴来说。
-* setDrawLabels(boolean enabled):设置为true打开绘制轴的标签。   
-
-####修改轴线样式     
-
-* setTextColor(int color): 设置轴标签的颜色。
-* setTextSize(float size):设置轴标签的字体大小以dp为单位。
-* setTypeface(Typeface tf):设置轴标签的自定义Typeface
-* setGridColor(int color): 设置这个轴的网格线颜色。
-* setGridLineWidth(float width):设置轴的网格线宽度。
-* setAxisLineColor(int color):设置此轴的坐标轴的颜色。
-* setAxisLineWidth(float width): 设置此轴的坐标轴的宽度。    
-
-####自定义轴线的值    
-
-* 如果被设置为true，x轴条目将依赖于它自己在进行缩放的时候。如果设置为false，x轴条目将总是保持相同。
-* 如果设置为true，图表将避免第一个和最后一个标签条目被减掉在图表或屏幕的边缘。
-* 设置x轴标签之间的空间字符数，默认是4个。
-* 设置XAxis应该出现的位置。可以选择TOP，BOTTOM，BOTH_SIDED，TOP_INSIDE或者BOTTOM_INSIDE。   
-
-例子：
-    
-            XAxis xAxis = chart.getXAxis();
-            xAxis.setPosition(XAxisPosition.BOTTOM);
-            xAxis.setTextSize(10f);
-            xAxis.setTextColor(Color.RED);
-            xAxis.setDrawAxisLine(true);
-            xAxis.setDrawGridLines(false);
-            // and more...
         
 ###设置数据    
 
@@ -293,14 +278,14 @@ XAxis类允许对下面的组件或部分指定具体的样式：
             public LineData(ArrayList<String> xVals, ArrayList<LineDataSet> sets) { ... }
             
 因此，什么是DataSet为什么需要它？那实际上相当简单。在图表内互相在一起的数据集对象表示一组条目（数据条目类型）。它被设计用来区分在图表中逻辑上不同组的值。对于每种类型的图表，扩展数据集 （例如 LineDataSet） 的不同对象存在允许特定的样式。
-作为一个例子，你可能想用LineChart展示两个不同公司的季度收入在一年中的。在这种情况下，建议你创建两个不同的LineDataSet对象，每个包含四个指（每个占四分之一）。用ArrayList来描述x轴上的标签，你可以简单的提供四个字符串“1.Q”,“2.Q”,“3.Q”,“4.Q"   
+作为一个例子，你可能想用LineChart展示两个不同公司的季度收入在一年中的。在这种情况下，建议你创建两个不同的LineDataSet对象，每个包含四个值（每个代表一个季度）。用ArrayList来描述x轴上的标签，你可以简单的提供四个字符串“1.Q”,“2.Q”,“3.Q”,“4.Q"   
 当然，你只提供一个包含两个公司8个值的LineDataSet对象也是可以的。    
    
 那么怎么设置一个LinDataSet对象呢？      
 
              public LineDataSet(ArrayList<Entry> yVals, String label) { ... }   
      
-在查找构造函数时（不同的构造函数可用），它是可见的，LinedataSet需要一个ArrayList条目类型和一个字符串用来描述LineDataSet以及用于图标标签。更进一步这个标签能被用来寻找在LineData对象中除LineDataSet对象外的其他LineDataSet。
+在查找构造函数时（不同的构造函数可用），它是可见的，LinedataSet需要一个ArrayList条目类型和一个字符串用来描述LineDataSet以及用于图表标签。更进一步这个标签能被用来寻找在LineData对象中除LineDataSet对象外的其他LineDataSet。
 ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装它周围的值还保存了它自己的值，它的位置在x轴（在LineData对象的字符串类型的ArrayList里面值的索引被映射）：    
 
              public Entry(float val, int xIndex) { ... }
@@ -368,10 +353,10 @@ ArrayList条目类型封装了图表的所有值。一个Entry对象除了封装
     
 除了以上，有许多其他的方法来给数据集设置颜色。下面是完整的文档：  
 
-* 设置颜色应该被用在数据集前面，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。你能使用"new int[] { R.color.red, R.color.green, ... }" 来给这个方法提供颜色。在内部，颜色通过使用getResources().getColor(...)来获取。
-* 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
-* 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
-* 设置一种或者唯一一种颜色应该被用于这个数据集之前。在内部，这将重新创建颜色数组并添加指定的颜色。   
+* setColors(int [] colors, Context c):  设置颜色应该被用在数据集前面，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。你能使用"new int[] { R.color.red, R.color.green, ... }" 来给这个方法提供颜色。在内部，颜色通过使用getResources().getColor(...)来获取。
+* setColors(int [] colors): 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
+* setColors(ArrayList<Integer> colors): 设置颜色应该被用在数据集之前，只要数据集表示的i项数大于颜色数组的大小，颜色将被重用。确保颜色应经被准备好（通过调用getResources().getColor(...)）在增加它们到数据集之前。
+* setColor(int color): 设置一种或者唯一一种颜色应该被用于这个数据集之前。在内部，这将重新创建颜色数组并添加指定的颜色。   
 
 ColorTemplate例子：
 
@@ -380,10 +365,47 @@ ColorTemplate例子：
         
 如果没有颜色被设置对于数据集，默认颜色被使用
 
-###指定图表设置    
+###数据格式化
+这个ValueFormatter接口可以用来创建定制格式化程序类允许格式化图标中的数据或这Y轴上的数据。
 
-在第一章1. Getting Started 图表设置和样式方法可以被用于所有提到的图表类型。这章将集中于指定设置对于专有的图表类型。
+使用ValueFormatter仅需要创建一个新的类和实现他的接口并且从getFormattedValue(float value)返回任何你想要显示的文本。
 
+自定义格式化的例子：   
+    
+            public class MyValueFormatter implements ValueFormatter {
+            
+                private DecimalFormat mFormat;
+            
+                public MyValueFormatter() {
+                    mFormat = new DecimalFormat("###,###,##0.0"); // use one decimal
+                }
+            
+                @Override
+                public String getFormattedValue(float value) {
+                    return mFormat.format(value) + " $"; // append a dollar-sign
+                }
+            }
+
+然后设置你需要格式化的YAxis, ChartData或者DataSet对象:
+
+			// usage on axis
+			yAxis.setValueFormatter(new MyValueFormatter());
+
+			// usage on whole data object
+			lineData.setValueFormatter(new MyValueFormatter());
+
+			// usage on individual dataset object
+			lineDataSet.setValueFormatter(new MyValueFormatter());
+
+###特殊图表设置
+
+在章节1的通用图标设置和样式函数适用于所有之前提及的图表类型。这个章节关注特殊设置用于独特的图标类型。
+
+####饼图
+	
+* setDrawSliceText(boolean enabled): 设置这个为true是绘制x轴的值文本在饼图切片上。
+* setUsePercentValues(boolean enabled): 如果设置为true，图标显示数据的百分比而不是他们的原始数据。数据提供了ValueFormatter情况下会格式化百分比数据。
+	
 ###图例   
 
 默认，所有的图表类型支持图例并且将自动生成绘制出图例在为图表设置数据之后。图例通常包含多种条目每个标签代表一个形状。   
@@ -427,7 +449,8 @@ ColorTemplate例子：
 ###动态和实时数据   
 
 为了动态增加或者移除数据到图表，有多种方法允许你增加或者移除条目对象到一个存在的数据集或者从数据集对象到一个存在的ChartData对象。  
-类DataSet（和所有的子类）：
+
+####类DataSet（和所有的子类）：
 
 * addEntry（Entry e): 增加给出的条目对象到DataSet   
 
@@ -452,9 +475,40 @@ ColorTemplate例子：
 
 ###修改Viewport    
 
-* fitScreen(): 重置所有的缩放和拖动使图表完全适合它的边界。    
+这个库包含各种方法修改视口，请注意这些方法仅适用于LineChart, BarChart, ScatterChart and CandleStickChart。
+
+请注意所有修改视口方法调需要在图标设置数据之后。
+
+####约束显示什么
+
+* setVisibleXRange(float xRange): 设置区域的大小(范围在x轴)。例如设置了10，没有超过10的值在x轴上可查看不需要滚动
+* setVisibleYRange(float yRange, AxisDependency axis): 设置区域的大小(范围在y轴)。你同样需要提供轴此约束应适用于。
+* setViewPortOffsets(float left, float top, float right, float bottom):设定对当前视口的自定义便宜（对于图标窗口边的实际偏移），设置这个将防止图表自动计算他的偏移。使用resetViewPortOffsets()取消这个设置。
+resetViewPortOffsets():重置通过setViewPortOffsets(...)设置的自定义偏移。允许图标再次自动计算所有偏移。
+
+####移动视图
+
+* fitScreen(): 重置所有的缩放和拖动使图表完全适合它的边界。 
+* moveViewToX(float xIndex): 移动当前视口的左侧（边缘）到指定的x索引
+* moveViewToY(float yValue, AxisDependency axis): 中心视口提供的y轴上指定的y值(左侧或右侧)。
+* moveViewTo(float xIndex, float yValue, AxisDependency axis): 这将移动当前视口的左侧（边缘）到指定的x索引在x轴上，并且中心视口提供的y轴上指定的y值（相当于结合了setVisibleXRange(...)和setVisibleYRange(...)）
+* centerViewTo(int xIndex, float yValue, AxisDependency axis): 这会将当前视区的中心移动到指定的x指数和y值（相当于结合了setVisibleXRange(...)和 setVisibleYRange(...)）
+
+ 完整例子：
+			chart.setData(...); // first set data
+
+			// now modify viewport
+			chart.setVisibleXRange(20); // allow 20 values to be displayed on the x-axis
+			chart.moveViewToX(10); // set the left edge of the chart to x-index 10
+
+			// refresh
+			chart.invalidate();
 
 ###动画   
+
+注意：动画只能工作在API级别11(Android 3.0.x)或更高
+
+在低版本Android使用，动画将不执行（但是也不奔溃）
 
 所有的图表类型都支持动画，那能被用来创建图表以一种很酷的方式。有三种类型的动画方法存在通过x轴，y轴或者两个轴来区分：
 * animateX(int durationMillis):动画的图表值在水平轴，意味着图标将在指定的时间从左到右建立。
@@ -469,10 +523,76 @@ ColorTemplate例子：
      
 如果animate（...)（任何类）被调用,不用再调用invalidate()来刷新图表。   
 
-####注意    
+####动画缓冲
 
-由于nineoldandroid-library的移除，动画不能在 Android 3.0 （API 级别 11） 以前的版本工作。然而，这并不会导致应用程序崩溃。调用上面提到的动画方法将不会做什么在这种情况下。
+这个库允许你为你的动画使用好的缓冲函数。你能选着下面预定义的静态Easing.EasingOption
 
+		public enum EasingOption {
+			  Linear,
+			  EaseInQuad,
+			  EaseOutQuad,
+			  EaseInOutQuad,
+			  EaseInCubic,
+			  EaseOutCubic,
+			  EaseInOutCubic,
+			  EaseInQuart,
+			  EaseOutQuart,
+			  EaseInOutQuart,
+			  EaseInSine,
+			  EaseOutSine,
+			  EaseInOutSine,
+			  EaseInExpo,
+			  EaseOutExpo,
+			  EaseInOutExpo,
+			  EaseInCirc,
+			  EaseOutCirc,
+			  EaseInOutCirc,
+			  EaseInElastic,
+			  EaseOutElastic,
+			  EaseInOutElastic,
+			  EaseInBack,
+			  EaseOutBack,
+			  EaseInOutBack,
+			  EaseInBounce,
+			  EaseOutBounce,
+			  EaseInOutBounce,
+		  }
+
+基本上有两种缓冲动画：
+
+1、预定义缓冲动画：（这些代码可以运行在任何安卓版本）
+
+		public void animateY(int durationmillis, Easing.EasingOption option); 
+
+使用预定义缓冲选项调用任何动画方法
+
+		// animate both axes with easing
+		mChart.animateY(3000, Easing.EasingOption.EaseOutBack); 
+		
+在安卓3.0（API Level 11）以下版本总是使用Easing.EasingOption为预定义缓冲动画。
+
+2、自定义缓冲函数：（自定义缓冲函数在安卓3.0以下会奔溃）
+
+		public void animateY(int durationmillis, EasingFunction function); 
+		
+创建自定义缓冲动画通过创建你自己的缓冲函数和实现EasingFunction接口：
+
+		 /**
+		  * Interface for creating custom made easing functions. 
+		  */
+		  public interface EasingFunction {
+			 /**
+			  * Called everytime the animation is updated.
+			  * @param input - the time passed since the animation started (value between 0 and 1)
+			  */
+			  public float getInterpolation(float input);
+		  }
+		  
+下面是调用这个的方法（注意，这个运行在安卓3.0以下会奔溃）
+
+		 // animate both axes with easing
+		 mChart.animateY(3000, new MyEasingFunction()); 
+		  
 ###MarkerView     
 
 MakerView类能被任何用户创建的类扩展为了展示自定义的（弹窗）View无论何时要在图表中高亮一个值。   
@@ -586,17 +706,17 @@ ChartData类是所有数据类的基类（子类），像LineData，BarData，..
 
 ####BarData（类 BarData）  
 
-* 设置不同的数据集对象的bars之间的空间占一个bar的宽度的百分比。100正好是一个bar的宽度，默认：80.
-* 如果数据对象被分组返回true（包括超过一个数据集），否则返回false。   
+* setGroupSpace(float percent): 设置不同的数据集对象的bars之间的空间占一个bar的宽度的百分比。100正好是一个bar的宽度，默认：80.
+*  isGrouped(): 如果数据对象被分组返回true（包括超过一个数据集），否则返回false。   
 
 ####ScatterData(类 ScatterData）   
 
-* 返回所有ScatterDataSets这个数据对象包含的最大的外形尺寸。   
+* getGreatestShapeSize(): 返回所有ScatterDataSets这个数据对象包含的最大的外形尺寸。   
 
 ####PieData(类 PieData)   
 
-* 返回为这个数据对象设置的PieDataSet对象。PieData对象不能包含多个PieDataSets。
-* 设置PieDataSet这个数据对象应该被呈现。  
+* getDataSet(): 返回为这个数据对象设置的PieDataSet对象。PieData对象不能包含多个PieDataSets。
+* setDataSet(PieDataSet set): 设置PieDataSet这个数据对象应该被呈现。  
 
 ####CombinedData(类 CombinedData）  
 
